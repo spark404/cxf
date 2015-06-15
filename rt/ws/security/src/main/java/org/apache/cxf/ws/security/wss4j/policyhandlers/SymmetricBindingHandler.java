@@ -22,6 +22,7 @@ package org.apache.cxf.ws.security.wss4j.policyhandlers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -398,6 +399,7 @@ public class SymmetricBindingHandler extends AbstractBindingBuilder {
                                           boolean atEnd) {
         try {
             WSSecDKEncrypt dkEncr = new WSSecDKEncrypt(wssConfig);
+            dkEncr.setAttachmentCallbackHandler(new AttachmentCallbackHandler(message));
             if (recToken.getToken().getVersion() == SPConstants.SPVersion.SP11) {
                 dkEncr.setWscVersion(ConversationConstants.VERSION_05_02);
             }
@@ -480,11 +482,31 @@ public class SymmetricBindingHandler extends AbstractBindingBuilder {
             Element encrDKTokenElem = null;
             encrDKTokenElem = dkEncr.getdktElement();
             addDerivedKeyElement(encrDKTokenElem);
+
+            List<Element> attachmentsList = dkEncr.getAttachmentEncryptedDataElements();
+            Iterator<Element> attachmentIterator;
+            Element attachment;
             Element refList = dkEncr.encryptForExternalRef(null, encrParts);
             if (atEnd) {
                 this.insertBeforeBottomUp(refList);
+                if (attachmentsList != null) {
+                    attachmentIterator = attachmentsList.iterator();
+
+                    while (attachmentIterator.hasNext()) {
+                        attachment = attachmentIterator.next();
+                        this.insertBeforeBottomUp(attachment);
+                    }
+                }
             } else {
-                this.addDerivedKeyElement(refList);                        
+                this.addDerivedKeyElement(refList);
+                if (attachmentsList != null) {
+                    attachmentIterator = attachmentsList.iterator();
+
+                    while (attachmentIterator.hasNext()) {
+                        attachment = attachmentIterator.next();
+                        this.addDerivedKeyElement(attachment);
+                    }
+                }
             }
             return dkEncr;
         } catch (Exception e) {
@@ -622,6 +644,7 @@ public class SymmetricBindingHandler extends AbstractBindingBuilder {
                                boolean included) throws WSSecurityException {
         Document doc = saaj.getSOAPPart();
         WSSecDKSign dkSign = new WSSecDKSign(wssConfig);
+        dkSign.setAttachmentCallbackHandler(new AttachmentCallbackHandler(message));
         if (policyAbstractTokenWrapper.getToken().getVersion() == SPConstants.SPVersion.SP11) {
             dkSign.setWscVersion(ConversationConstants.VERSION_05_02);
         }
