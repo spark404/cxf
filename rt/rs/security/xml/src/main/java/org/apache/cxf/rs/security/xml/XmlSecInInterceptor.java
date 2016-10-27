@@ -215,7 +215,7 @@ public class XmlSecInInterceptor extends AbstractPhaseInterceptor<Message> {
                 cryptoType.setAlias(mapping.getValue());
                 X509Certificate[] certs = sigCrypto.getX509Certificates(cryptoType);
                 if (certs != null && certs.length > 0) {
-                    properties.getKeyNameMap().put(mapping.getKey(), certs[0].getPublicKey());
+                    properties.addKeyNameMapping(mapping.getKey(), certs[0].getPublicKey());
                 }
             }
 
