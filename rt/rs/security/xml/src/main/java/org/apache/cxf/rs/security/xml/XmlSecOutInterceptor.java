@@ -339,6 +339,10 @@ public class XmlSecOutInterceptor extends AbstractPhaseInterceptor<Message> {
         if (sigProps.getSignatureLocation() != null) {
             properties.setSignaturePosition(sigProps.getSignatureLocation());
         }
+
+        if (sigProps.getSignatureGenerateIdAttributes() != null) {
+            properties.setGenerateIds(sigProps.getSignatureGenerateIdAttributes());
+        }
         
         if (elementsToSign == null || elementsToSign.isEmpty()) {
             LOG.fine("No Elements to sign are specified, so the entire request is signed");

@@ -26,6 +26,7 @@ public class SignatureProperties {
     private String signatureKeyIdType;
     private String signatureKeyName;
     private Integer signatureLocation;
+    private Boolean signatureGenerateIdAttributes;
 
     public void setSignatureAlgo(String signatureAlgo) {
         this.signatureAlgo = signatureAlgo;
@@ -88,5 +89,13 @@ public class SignatureProperties {
 
     public void setSignatureLocation(Integer signatureLocation) {
         this.signatureLocation = signatureLocation;
+    }
+
+    public Boolean getSignatureGenerateIdAttributes() {
+        return signatureGenerateIdAttributes;
+    }
+
+    public void setSignatureGenerateIdAttributes(Boolean signatureGenerateIdAttributes) {
+        this.signatureGenerateIdAttributes = signatureGenerateIdAttributes;
     }
 }
