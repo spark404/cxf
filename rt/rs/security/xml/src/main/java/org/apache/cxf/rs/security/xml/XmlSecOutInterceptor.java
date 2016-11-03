@@ -341,7 +341,12 @@ public class XmlSecOutInterceptor extends AbstractPhaseInterceptor<Message> {
         }
 
         if (sigProps.getSignatureGenerateIdAttributes() != null) {
-            properties.setGenerateIds(sigProps.getSignatureGenerateIdAttributes());
+            properties.setSignatureGenerateIds(sigProps.getSignatureGenerateIdAttributes());
+        }
+
+        if (Boolean.TRUE.equals(sigProps.getSignatureOmitC14nTransform())) {
+            properties.setSignatureDefaultCanonicalizationTransform(transform);
+            properties.setSignatureIncludeDigestTransform(false);
         }
         
         if (elementsToSign == null || elementsToSign.isEmpty()) {
