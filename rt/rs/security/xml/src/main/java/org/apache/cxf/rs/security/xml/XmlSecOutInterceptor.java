@@ -345,7 +345,6 @@ public class XmlSecOutInterceptor extends AbstractPhaseInterceptor<Message> {
         }
 
         if (Boolean.TRUE.equals(sigProps.getSignatureOmitC14nTransform())) {
-            properties.setSignatureDefaultCanonicalizationTransform(transform);
             properties.setSignatureIncludeDigestTransform(false);
         }
         
