@@ -71,6 +71,8 @@ public abstract class AbstractSpringComponentScanServer extends AbstractSpringCo
     protected AbstractSpringComponentScanServer(Class<? extends Annotation> serviceAnnotation) {
         this.serviceAnnotation = serviceAnnotation;
     }
+
+    @Override
     protected void setJaxrsResources(JAXRSServerFactoryBean factory) {
         boolean checkJaxrsRoots = checkJaxrsRoots();
         boolean checkJaxrsProviders = checkJaxrsProviders();
@@ -176,9 +178,11 @@ public abstract class AbstractSpringComponentScanServer extends AbstractSpringCo
         return resourceProviders;
     }
     
+    @Override
     protected List<Object> getJaxrsProviders() {
         return jaxrsProviders;
     }
+
     @Override
     public List<Feature> getFeatures() {
         return cxfFeatures;
