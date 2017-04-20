@@ -61,6 +61,8 @@ public abstract class AbstractSpringComponentScanServer extends AbstractSpringCo
     private List<Feature> cxfFeatures = new LinkedList<Feature>();
     private List<Interceptor<? extends Message>> cxfInInterceptors = new LinkedList<Interceptor<?>>();
     private List<Interceptor<? extends Message>> cxfOutInterceptors = new LinkedList<Interceptor<?>>();
+    private List<Interceptor<? extends Message>> cxfInFaultInterceptors = new LinkedList<Interceptor<?>>();
+    private List<Interceptor<? extends Message>> cxfOutFaultInterceptors = new LinkedList<Interceptor<?>>();
     private Class<? extends Annotation> serviceAnnotation;
     
     protected AbstractSpringComponentScanServer() {
@@ -115,8 +117,9 @@ public abstract class AbstractSpringComponentScanServer extends AbstractSpringCo
         factory.setProviders(getJaxrsProviders());
         factory.setFeatures(getFeatures());
         factory.setInInterceptors(getInInterceptors());
+        factory.setInFaultInterceptors(getInFaultInterceptors());
         factory.setOutInterceptors(getOutInterceptors());
-        
+        factory.setOutFaultInterceptors(getOutFaultInterceptors());
     }
     
     private static void warnIfDuplicatesAvailable(List<? extends Object> providers) {
@@ -143,6 +146,10 @@ public abstract class AbstractSpringComponentScanServer extends AbstractSpringCo
             cxfInInterceptors.add((Interceptor<?>)bean);
         } else if (ann.value() == org.apache.cxf.annotations.Provider.Type.OutInterceptor) {
             cxfOutInterceptors.add((Interceptor<?>)bean);
+        } else if (ann.value() == org.apache.cxf.annotations.Provider.Type.InFaultInterceptor) {
+            cxfInFaultInterceptors.add((Interceptor<?>)bean);
+        } else if (ann.value() == org.apache.cxf.annotations.Provider.Type.OutFaultInterceptor) {
+            cxfOutFaultInterceptors.add((Interceptor<?>)bean);
         }
         
     }
@@ -176,12 +183,24 @@ public abstract class AbstractSpringComponentScanServer extends AbstractSpringCo
     public List<Feature> getFeatures() {
         return cxfFeatures;
     }
+
     @Override
     public List<Interceptor<? extends Message>> getInInterceptors() {
         return cxfInInterceptors;
     }
+
+    @Override
     public List<Interceptor<? extends Message>> getOutInterceptors() {
         return cxfOutInterceptors;
     }
-    
+
+    @Override
+    public List<Interceptor<? extends Message>> getInFaultInterceptors() {
+        return cxfInFaultInterceptors;
+    }
+
+    @Override
+    public List<Interceptor<? extends Message>> getOutFaultInterceptors() {
+        return cxfOutFaultInterceptors;
+    }
 }
